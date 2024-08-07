@@ -1,16 +1,26 @@
 #include <Arduino.h>
 #include "Stepper.hpp"
+#include "Neck.hpp"
 
 // TODO: Config...
 Stepper base;
+Neck xAxis;
+Neck yAxis;
+
 String command = "";
 
 void setup() {
   // Start serial communication at 9600 baud rate;
   Serial.begin(9600);
 
-  // Initialize base stepper motor...
-  base = Stepper(2, 3, 4); 
+  // Initialize motors...
+  base = Stepper(2, 3, 4);
+  xAxis = Neck(5, 15, 15, 100);
+  yAxis = Neck(6, 15, 15, 85);
+
+  // Set Neck to center pos!
+  xAxis.center();
+  yAxis.center();
 }
 
 void loop() {
