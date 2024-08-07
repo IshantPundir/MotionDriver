@@ -13,7 +13,7 @@ class Neck {
         void step(int value);
 
     private:
-        Servo servo;
+        Servo neckServo;
         int servoPin;
         int maxRange;
         int minRange;

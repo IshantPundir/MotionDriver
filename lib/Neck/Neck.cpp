@@ -1,22 +1,24 @@
 #include "Neck.hpp"
+#include <Servo.h>
 
-Neck::Neck(int pin, int max, int min, int center) : centerPos(center)
-{
+
+Neck::Neck(int pin, int max, int min, int center) {
     // TODO: assertions
+    centerPos = center;
     maxRange = centerPos + max;
     minRange = centerPos - min;
-    servo.attach(pin);
+
+
+    neckServo.attach(pin);
 };
 
 Neck::Neck() {}
 
-Neck::~Neck() {
-    servo.detach();
-};
+Neck::~Neck() {};
 
 void Neck::turnToAngle(int angle) {
     if (angle <= maxRange && angle >= minRange) {
-        servo.write(angle);
+        neckServo.write(angle);
     }
 };
 
