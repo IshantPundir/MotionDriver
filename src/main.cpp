@@ -24,7 +24,12 @@ void loop() {
     Serial.print("\nTurning to ");
     Serial.println(angle);
 
-    base.turn(angle);
+    if (angle == 999) {
+      base.release();
+    }
+    else {
+      base.turn(angle, 100);
+    }
   }
 
   base.run();

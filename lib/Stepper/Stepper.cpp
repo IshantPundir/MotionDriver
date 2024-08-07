@@ -9,40 +9,25 @@ Stepper::Stepper(int stepPin, int dirPin, int enablePin) :
     pinMode(stepPin, OUTPUT);
     pinMode(dirPin, OUTPUT);
     pinMode(enablePin, OUTPUT);
+    setDirection(DIRECTION::RIGHT);
 };
 
 Stepper::~Stepper() {};
 
-void Stepper::setSpeed(int speed) {
+void Stepper::setDirection(DIRECTION direction) {
+    if (turningDirection == direction) return;
+    turningDirection = direction;
 
-};
-
-void Stepper::turn(int angle) {
-    // Make sure driver is enabled...
-    if (!isEnabled) { setEnable(true); }
-    // TODO: calculate steps from angle...
-
-    targerStep = angle;
-    isMoving = true;
-}
-
-void Stepper::run() {
-    if (isMoving && (micros() - lastStepTime >= stepDelay)) {
-        lastStepTime = micros();
-        if (currentStep < targerStep) {
-            digitalWrite(stepPin, HIGH);
-            delayMicroseconds(stepDelay / 2);
-            digitalWrite(stepPin, LOW);
-            delayMicroseconds(stepDelay / 2);
-            Serial.print("*");
-            currentStep ++;
-        }
-        else {
-            isMoving = false;
-            currentStep = 0;
-        }
+    switch (turningDirection)
+    {
+        case DIRECTION::RIGHT:
+            digitalWrite(dirPin, HIGH);
+            break;
+        default:
+            digitalWrite(dirPin, LOW);
+            break;
     }
-}
+};
 
 void Stepper::setEnable(bool enable) {
     if (enable) {
@@ -52,5 +37,48 @@ void Stepper::setEnable(bool enable) {
     else {
         digitalWrite(enablePin, LOW);
         isEnabled = false;
+    }
+}
+
+void Stepper::release() {
+    currentStep = 0;
+    isMoving = false;
+    setEnable(false);
+};
+
+void Stepper::step() {
+    digitalWrite(stepPin, HIGH);
+    delayMicroseconds(stepDelay);
+    digitalWrite(stepPin, LOW);
+    delayMicroseconds(stepDelay);
+}
+
+void Stepper::turn(int angle, int speed) {
+    // Make sure driver is enabled...
+    if (!isEnabled) { setEnable(true); }
+
+    targerStep = angle * stepsPerDeg;
+    isMoving = true;
+}
+
+void Stepper::run() {
+    if (isMoving && (micros() - lastStepTime >= stepDelay)) {
+        lastStepTime = micros();
+        if (currentStep < targerStep) {            
+            setDirection(DIRECTION::RIGHT);
+            currentStep ++;
+        }
+        else if (currentStep > targerStep) {
+            setDirection(DIRECTION::LEFT);
+            currentStep --;
+        }
+        else {
+            isMoving = false;
+            return;
+        }
+
+        step();
+        Serial.print(currentStep);
+        Serial.print(" ");
     }
 }
