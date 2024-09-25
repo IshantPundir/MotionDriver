@@ -15,6 +15,7 @@ class Stepper {
         void turn(int angle, int speed);
         void release();
         void run();
+        void test();
 
     private:
         int stepPin;

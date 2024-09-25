@@ -35,6 +35,7 @@ void handleStepperCommand(char action, String parameters) {
       break;
     default:
       Serial.println("Invalid Stepper Action");
+      base.test();
   }
 }
 

@@ -82,3 +82,12 @@ void Stepper::run() {
         Serial.print(" ");
     }
 }
+
+
+void Stepper::test() {
+    setEnable(true);
+    for (int i = 0; i < stepsPerRev; i++) {
+        step();
+    }
+    setEnable(false);
+}
