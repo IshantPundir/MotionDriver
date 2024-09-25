@@ -29,7 +29,7 @@ void Neck::center() {
 void Neck::step(int value) {
     int angle = centerPos + value;
     if (angle > maxRange) { angle = maxRange; }
-    else if (angle < minRange) { angle = maxRange; }
+    else if (angle < minRange) { angle = minRange; }
 
     turnToAngle(angle);
 }
