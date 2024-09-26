@@ -16,7 +16,7 @@ void setup() {
   // Initialize motors...
   base = Stepper(2, 3, 4); // Step-pin, Dir-pin, Enable-pin
   xAxis = Neck(5, 15, 15, 100); // Servo-pin, max-range, min-range, center-position;
-  yAxis = Neck(6, 15, 15, 85);
+  yAxis = Neck(6, 15, 25, 85);
 
   // Set Neck to center pos!
   xAxis.center();
